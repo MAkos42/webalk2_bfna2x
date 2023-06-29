@@ -86,18 +86,13 @@ export class TripsComponent implements OnInit {
     let newTrip = new TripDTO(formDriver.driver, formDriver.vehicle, formDriver.date.toISOString(), formDriver.purpose, formDriver.startLocation, formDriver.endLocation, formDriver.distance, formDriver.isReturnTrip);
 
     console.log(newTrip);
-    let syncMagic = new Promise<void>((resolve) => {
-      this.tripsProxyService.saveTrip(newTrip).subscribe(data => {
-        console.log(data);
-        resolve();
-      });
-    })
-
-    syncMagic.then(() => {
+    this.tripsProxyService.saveTrip(newTrip).subscribe(data => {
+      console.log(data);
       this.snackBar.open('Utazás sikeresen elmentve', 'Bezár', { duration: 2000 });
       this.tripForm.reset();
       this.loadData();
-    })
+    });
+
   }
 
 

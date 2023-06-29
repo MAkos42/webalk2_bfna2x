@@ -55,16 +55,12 @@ export class DriversComponent implements OnInit {
     if (id == null) { //return if no id
       return;
     }
-    let syncMagic = new Promise<void>((resolve) => {
-      this.driversProxyService.getDriver(id).subscribe(driver => {
-        this.selectedDriver = driver;
-        this.selectedDriver.dateOfBirth = driver.dateOfBirth;
-        console.log(driver);
-        console.log(this.selectedDriver);
-        resolve();
-      })
-    })
-    syncMagic.then(() => {
+    this.driversProxyService.getDriver(id).subscribe(driver => {
+      this.selectedDriver = driver;
+      this.selectedDriver.dateOfBirth = driver.dateOfBirth;
+      console.log(driver);
+      console.log(this.selectedDriver);
+
       if (this.selectedDriver == null)
         return;
       console.log('setting value');
@@ -106,17 +102,13 @@ export class DriversComponent implements OnInit {
       this.snackBar.open('Kérlek tölts ki minden mezőt megfelelően', 'Bezár', { duration: 2000 });
     }
 
-    let formDriver = this.driverForm.value;
-    let syncMagic = new Promise<void>((resolve) => {               //syncronisation black magic
-      this.driversProxyService.getDriverByLicense(formDriver.driversLicense).subscribe(vehicle => {
-        console.log(vehicle);
-        if (vehicle != null) {
-          this.licenseUsedError = true;
-        }
-        resolve();
-      })
-    })
-    syncMagic.then(() => {
+    let formDriver = this.driverForm.value;        //syncronisation black magic
+    this.driversProxyService.getDriverByLicense(formDriver.driversLicense).subscribe(vehicle => {
+      console.log(vehicle);
+      if (vehicle != null) {
+        this.licenseUsedError = true;
+      }
+
       console.log(this.licenseUsedError);
       if (!this.editMode && this.licenseUsedError) {
         this.driverForm.controls['driversLicense'].setErrors({ licenseInUse: true });
@@ -133,14 +125,9 @@ export class DriversComponent implements OnInit {
       this.selectedDriver.idExpirationDate = formDriver.idExpirationDate.toISOString();
 
       console.log(this.selectedDriver);
-      let nestedSyncMagic = new Promise<void>((resolve) => {
-        this.driversProxyService.saveVehicle(this.selectedDriver).subscribe(data => {
-          console.log(data);
-          resolve();
-        });
-      })
 
-      nestedSyncMagic.then(() => {
+      this.driversProxyService.saveVehicle(this.selectedDriver).subscribe(data => {
+        console.log(data);
 
         this.snackBar.open('Sofőr sikeresen elmentve', 'Bezár', { duration: 2000 });
         if (!this.editMode)

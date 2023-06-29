@@ -3,5 +3,8 @@
     "workspaces": [
         "frontend",
         "backend"
-    ]
+    ],
+    "dependencies": {
+        "npm": "^9.7.2"
+    }
 }

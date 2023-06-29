@@ -6,11 +6,8 @@ import { Trip } from "./entity/Trip"
 import { Login } from "./entity/Login"
 
 export const AppDataSource = new DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "admin",
-    password: "admin",
+    type: "mongodb",
+    url: "mongodb://localhost:27017",
     database: "triplog",
     synchronize: true,
     logging: true,

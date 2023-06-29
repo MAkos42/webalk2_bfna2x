@@ -52,14 +52,9 @@ export class VehiclesComponent implements OnInit {
     if (id == null) { //return if no id
       return;
     }
-    let syncMagic = new Promise<void>((resolve) => {
-      this.vehiclesProxyService.getVehicle(id).subscribe(vehicle => {
-        this.selectedVehicle = vehicle;
-        console.log(this.selectedVehicle);
-        resolve();
-      })
-    })
-    syncMagic.then(() => {
+    this.vehiclesProxyService.getVehicle(id).subscribe(vehicle => {
+      this.selectedVehicle = vehicle;
+      console.log(this.selectedVehicle);
       if (this.selectedVehicle == null)
         return;
 
@@ -96,17 +91,12 @@ export class VehiclesComponent implements OnInit {
       this.snackBar.open('Kérlek tölts ki minden mezőt megfelelően', 'Bezár', { duration: 2000 });
     }
 
-    let formVehicle = this.vehicleForm.value;
-    let syncMagic = new Promise<void>((resolve) => {               //syncronisation black magic
-      this.vehiclesProxyService.getVehicleByRegPlate(formVehicle.regPlate).subscribe(vehicle => {
-        console.log(vehicle);
-        if (vehicle != null) {
-          this.plateUsedError = true;
-        }
-        resolve();
-      })
-    })
-    syncMagic.then(() => {
+    let formVehicle = this.vehicleForm.value;            //syncronisation black magic
+    this.vehiclesProxyService.getVehicleByRegPlate(formVehicle.regPlate).subscribe(vehicle => {
+      console.log(vehicle);
+      if (vehicle != null) {
+        this.plateUsedError = true;
+      }
       console.log(this.plateUsedError);
       if (!this.editMode && this.plateUsedError) {
         this.vehicleForm.controls['regPlate'].setErrors({ PlateInUse: true });
@@ -124,20 +114,13 @@ export class VehiclesComponent implements OnInit {
       this.selectedVehicle.odometer = formVehicle.odometer;
 
       console.log(this.selectedVehicle);
-      let nestedSyncMagic = new Promise<void>((resolve) => {
-        this.vehiclesProxyService.saveVehicle(this.selectedVehicle).subscribe(data => {
-          console.log(data);
-          resolve();
-        });
-      })
-
-      nestedSyncMagic.then(() => {
-
+      this.vehiclesProxyService.saveVehicle(this.selectedVehicle).subscribe(data => {
+        console.log(data);
         this.snackBar.open('Jármű sikeresen elmentve', 'Bezár', { duration: 2000 });
         if (!this.editMode)
           this.vehicleForm.reset();
         this.loadData();
-      })
+      });
     })
   }
 

@@ -63,7 +63,7 @@ export class ReportComponent implements OnInit {
     this.tripsProxyService.getReport(request).subscribe(response => {
       this.returnForm.setValue({
         distance: response.distance + ' km',
-        fuelConsumption: response.fuelConsumption + ' Ft',
+        fuelConsumption: response.fuelConsumption + ' l',
         flatRate: response.flatRate + ' Ft',
         sum: response.sum + ' Ft'
       });
