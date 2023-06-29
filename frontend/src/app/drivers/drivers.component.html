@@ -1,0 +1,106 @@
+<mat-toolbar color="primary">
+    <span>Sofőrök</span>
+</mat-toolbar>
+<mat-table [dataSource]="driverSource" class="mat-elevation-z8">
+    <!-- Replace 'column' with your table column names -->
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Név</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="dateOfBirth">
+        <mat-header-cell *matHeaderCellDef>Születési dátum</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.dateOfBirth }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="address">
+        <mat-header-cell *matHeaderCellDef>Lakcím</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.address }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="driversLicense">
+        <mat-header-cell *matHeaderCellDef>Jogosítványszám</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.driversLicense }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="idExpirationDate">
+        <mat-header-cell *matHeaderCellDef>Jogosítvány lejárati dátuma</mat-header-cell>
+        <mat-cell *matCellDef="let element"
+            [ngClass]="{ 'licenseExpired': getTime(element.idExpirationDate) < currentDate.getTime() }">{{
+            element.idExpirationDate }} <mat-icon *ngIf="getTime(element.idExpirationDate) < currentDate.getTime()"
+                [ngStyle]="{'color': '#333'}">warning</mat-icon></mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="extra">
+        <mat-header-cell *matHeaderCellDef class="extraColumn"><button class="right-align" mat-raised-button
+                color="accent" (click)="clearSelected()">Új
+                <mat-icon>add</mat-icon></button></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="extraColumn"></mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClicked(row)"></mat-row>
+</mat-table>
+<br>
+<form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+    <mat-toolbar color="accent">
+        <span *ngIf="editMode">
+            Sofőr szerkesztése
+            <button mat-raised-button color="primary" type="submit">Mentés</button>
+        </span>
+        <span *ngIf="!editMode">
+            Sofőr hozzáadása
+            <button mat-raised-button color="primary" type="submit">Mentés</button>
+        </span>
+    </mat-toolbar>
+    <mat-form-field>
+        <mat-label>Név</mat-label>
+        <input matInput placeholder="Tóth Béla" formControlName="name">
+        <mat-error *ngIf="driverForm.controls['name'].hasError('required') && driverForm.controls['name'].touched">
+            Név megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Születési dátum</mat-label>
+        <input matInput [matDatepicker]="dob" placeholder="DD/MM/YYYY" formControlName="dateOfBirth">
+        <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+        <mat-datepicker #dob></mat-datepicker>
+        <mat-error
+            *ngIf="driverForm.controls['dateOfBirth'].hasError('required') && driverForm.controls['dateOfBirth'].touched">
+            SZületési dátum megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="address">
+        <mat-label>Lakcím</mat-label>
+        <input matInput formControlName="address">
+        <mat-error
+            *ngIf="driverForm.controls['idExpirationDate'].hasError('required') && driverForm.controls['idExpirationDate'].touched">
+            Lakcím megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="driverForm.controls['dateOfBirth'].hasError('maxLength')">
+            Ebben a mezőben maximum 255 karakter adható meg
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Jogosítványszám</mat-label>
+        <input matInput placeholder="AA000000" formControlName="driversLicense">
+        <mat-error
+            *ngIf="driverForm.controls['driversLicense'].hasError('required') && driverForm.controls['driversLicense'].touched">
+            Jogosítványszám megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="driverForm.controls['driversLicense'].hasError('pattern')">
+            A jogosítványszám formátuma az AA000000 mintának megfelelőnek kell lennie
+        </mat-error>
+        <mat-error *ngIf="driverForm.controls['driversLicense'].hasError('licenseInUse')">
+            A megadott jogosítványszám már fel van véve a rendszerbe
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Lejárati dátum</mat-label>
+        <input matInput [matDatepicker]="expiration" placeholder="DD/MM/YYYY" formControlName="idExpirationDate">
+        <mat-datepicker-toggle matSuffix [for]="expiration"></mat-datepicker-toggle>
+        <mat-datepicker #expiration></mat-datepicker>
+        <mat-error
+            *ngIf="driverForm.controls['address'].hasError('required') && driverForm.controls['address'].touched">
+            Lejárati dátum
+        </mat-error>
+    </mat-form-field>
+
+</form>

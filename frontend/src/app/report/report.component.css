@@ -1,0 +1,23 @@
+mat-form-field {
+  width: 250px;
+  padding-bottom: 12px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button {
+  margin-left: 8px;
+  margin-bottom: 24px;
+}
+
+mat-header-cell {
+  text-align: center;
+}
+
+.disabled-field {
+  color: rgba(0, 0, 0, 0.6);
+}

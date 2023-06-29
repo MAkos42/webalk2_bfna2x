@@ -1,0 +1,7 @@
+{
+    "name": "infrend-beadando-projekt",
+    "workspaces": [
+        "frontend",
+        "backend"
+    ]
+}

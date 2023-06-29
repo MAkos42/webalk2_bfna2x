@@ -1,0 +1,65 @@
+<form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+    <mat-toolbar color="primary">
+        <span>
+            Riport létrehozása
+        </span>
+    </mat-toolbar>
+    <mat-form-field>
+        <mat-label>Jármű</mat-label>
+        <mat-select formControlName="vehicle">
+            <mat-option *ngFor="let vehicle of vehiclesList" [value]="vehicle.id">{{ vehicle.regPlate
+                }} | {{vehicle.type}}</mat-option>
+        </mat-select>
+        <mat-error
+            *ngIf="reportForm.controls['vehicle'].hasError('required') && reportForm.controls['vehicle'].touched">
+            Jármű megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Kezdő dátum</mat-label>
+        <input matInput [matDatepicker]="startDate" placeholder="DD/MM/YYYY" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
+        <mat-error
+            *ngIf="reportForm.controls['startDate'].hasError('required') && reportForm.controls['startDate'].touched">
+            Kezdődátum megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Befejezés Dátuma</mat-label>
+        <input matInput [matDatepicker]="endDate" placeholder="DD/MM/YYYY" formControlName="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+        <mat-error
+            *ngIf="reportForm.controls['endDate'].hasError('required') && reportForm.controls['endDate'].touched">
+            Kezdődátum megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" type="submit">Riport létrehozása</button>
+</form>
+<form [formGroup]="returnForm" *ngIf="reportCreated">
+    <mat-toolbar color="accent">
+        <span>{{displayVehicle(reportForm.controls['vehicle'].value)}} riportja
+        </span>
+    </mat-toolbar>
+    <mat-form-field>
+        <mat-label>Megtett távolság</mat-label>
+        <input matInput formControlName="distance" [disabled]="true">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Üzemanyag költség</mat-label>
+        <input matInput formControlName="fuelConsumption" [disabled]="true">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Átalány költség</mat-label>
+        <input matInput formControlName="flatRate" [disabled]="true">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Összköltség</mat-label>
+        <input matInput formControlName="sum" [disabled]="true">
+    </mat-form-field>
+</form>

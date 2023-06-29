@@ -1,0 +1,36 @@
+mat-form-field {
+  width: 250px;
+  padding-bottom: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button {
+  margin-left: 8px;
+}
+
+.mat-mdc-table .mat-mdc-row:hover {
+  cursor: pointer;
+  background-color: #ffd74022;
+}
+
+.mat-column-extra {
+  width: 100px;
+  align-content: right;
+}
+
+.licenseExpired {
+  background: #ffaaaaaa;
+}
+
+mat-header-cell {
+  text-align: center;
+}
+
+.address {
+  width: 500px;
+}

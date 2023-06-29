@@ -1,0 +1,106 @@
+<mat-toolbar color="primary">
+    <span>Járművek</span>
+</mat-toolbar>
+<mat-table [dataSource]="vehicleSource" class="mat-elevation-z8">
+    <!-- Replace 'column' with your table column names -->
+    <ng-container matColumnDef="regPlate">
+        <mat-header-cell *matHeaderCellDef>Rendszám</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.regPlate }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef>Típus</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.type }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="fuel">
+        <mat-header-cell *matHeaderCellDef>Üzemanyag</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.fuel }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="fuelEcon">
+        <mat-header-cell *matHeaderCellDef>Fogyasztás (l/100km)</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.fuelEcon }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="odometer">
+        <mat-header-cell *matHeaderCellDef>Kilométeróra</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.odometer }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="extra">
+        <mat-header-cell *matHeaderCellDef class="extraColumn"><button class="right-align" mat-raised-button
+                color="accent" (click)="clearSelected()">Új
+                <mat-icon>add</mat-icon></button></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="extraColumn"></mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClicked(row)"></mat-row>
+</mat-table>
+<br>
+<form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+    <mat-toolbar color="accent">
+        <span *ngIf="editMode">
+            Autó szerkesztése
+            <button mat-raised-button color="primary" type="submit">Mentés</button>
+        </span>
+        <span *ngIf="!editMode">
+            Autó hozzáadása
+            <button mat-raised-button color="primary" type="submit">Mentés</button>
+        </span>
+    </mat-toolbar>
+    <mat-form-field>
+        <mat-label>Rendszám</mat-label>
+        <input matInput placeholder="AAA(A)-000" formControlName="regPlate">
+        <mat-error
+            *ngIf="vehicleForm.controls['regPlate'].hasError('required') && vehicleForm.controls['regPlate'].touched">
+            Rendszám megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="vehicleForm.controls['regPlate'].hasError('pattern')">
+            A rendszám formátuma az AAA(A)-000 mintának megfelelőnek kell lennie
+        </mat-error>
+        <mat-error *ngIf="vehicleForm.controls['regPlate'].hasError('plateInUse')">
+            A megadott rendszám már fel van véve a rendszerbe
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Autó típusa</mat-label>
+        <input matInput placeholder="Honda Civic" formControlName="type">
+        <mat-error *ngIf="vehicleForm.controls['type'].hasError('required') && vehicleForm.controls['type'].touched">
+            Autó típusának megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="vehicleForm.controls['type'].hasError('maxLength')">
+            Ebben a mezőben maximum 255 karakter adható meg
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Üzemanyag</mat-label>
+        <mat-select formControlName="fuel">
+            <mat-option value="DIESEL">Diesel</mat-option>
+            <mat-option value="GASOLINE">Gasoline</mat-option>
+        </mat-select>
+        <mat-error *ngIf="vehicleForm.controls['fuel'].hasError('required') && vehicleForm.controls['fuel'].touched">
+            Üzemanyag típus megadása kötelező
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Fogyasztás (l/100km)</mat-label>
+        <input type="number" step="0.1" matInput placeholder="0.0" formControlName="fuelEcon">
+        <mat-error
+            *ngIf="vehicleForm.controls['fuelEcon'].hasError('required') && vehicleForm.controls['fuelEcon'].touched">
+            Fogyasztás megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="vehicleForm.controls['fuelEcon'].hasError('min')">
+            A megadott szám nem vehet fel negatív értéket
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Kilométeróra állás</mat-label>
+        <input type="number" matInput placeholder="0" formControlName="odometer">
+        <mat-error
+            *ngIf="vehicleForm.controls['odometer'].hasError('required') && vehicleForm.controls['odometer'].touched">
+            Kilométeróra állás megadása kötelező
+        </mat-error>
+        <mat-error *ngIf="vehicleForm.controls['odometer'].hasError('min')">
+            A megadott szám nem vehet fel negatív értéket
+        </mat-error>
+    </mat-form-field>
+    <br>
+</form>
