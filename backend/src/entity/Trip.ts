@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, ObjectId, ObjectIdColumn } from "typeorm";
 import { Vehicle } from './Vehicle';
 import { Driver } from "./Driver";
 import { TripPurpose } from "./TripPurpose";
@@ -6,8 +6,8 @@ import { TripPurpose } from "./TripPurpose";
 @Entity("trips")
 export class Trip {
 
-    @PrimaryGeneratedColumn({ name: "tripid" })
-    id: number
+    @ObjectIdColumn()
+    id: ObjectId
 
     @ManyToOne(() => Driver, { eager: true })
     @JoinColumn()

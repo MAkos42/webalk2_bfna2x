@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ObjectId, ObjectIdColumn } from "typeorm";
 
 @Entity("drivers")
 export class Driver {
 
-    @PrimaryGeneratedColumn({ name: "driverid" })
-    id: number
+    @ObjectIdColumn()
+    id: ObjectId
 
     @Column()
     name: string

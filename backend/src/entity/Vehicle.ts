@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, ObjectIdColumn, ObjectId } from "typeorm"
 import { Fuel } from "./Fuel"
 
 @Entity("vehicles")
 export class Vehicle {
 
-    @PrimaryGeneratedColumn({ name: "vehicleid" })
-    id: number
+    @ObjectIdColumn()
+    id: ObjectId
 
     @Column("char", { length: 8, nullable: false, unique: true })
     regPlate: string

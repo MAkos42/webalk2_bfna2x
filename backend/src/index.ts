@@ -3,16 +3,15 @@ import cors = require("cors");
 import { AppDataSource } from "./data-source"
 import { Driver } from "./entity/Driver";
 import { Fuel } from "./entity/Fuel";
-import { PrivilegeLevel } from "./entity/PrivilegeLevel";
 import { Trip } from "./entity/Trip";
 import { TripPurpose } from "./entity/TripPurpose";
-import { Login } from "./entity/Login";
 import { Vehicle } from "./entity/Vehicle";
 import { VehiclesService } from "./service/VehiclesService";
 import { DriversService } from "./service/DriversService";
 import { TripsService } from './service/TripsService';
 import { TripDTO } from "./DTO/TripDTO";
 import { ReportRequest } from "./DTO/ReportRequest";
+import { ObjectId } from "mongodb";
 
 const app = express();
 
@@ -189,19 +188,16 @@ app.listen(3000, () => {
 });
 
 AppDataSource.initialize().then(async () => {
-    let newAdmin: Login = new Login("admin", "admin", PrivilegeLevel.ADMIN);
-    newAdmin.id = 1;
     let newDriver: Driver = new Driver("Mészáros Ákos", new Date(2000, 9, 25), "valaholaföldön", "AB123456", new Date(2024, 1, 1));
-    newDriver.id = 1;
+    newDriver.id = new ObjectId(1);
     let newDriver2: Driver = new Driver("Balogh Gábor", new Date(1993, 11, 20), "Székesfehérvár", "XY123123", new Date(2023, 1, 1));
-    newDriver2.id = 2;
+    newDriver2.id = new ObjectId(2);
     let newVehicle: Vehicle = new Vehicle("ABCD-111", "Honda Civic", Fuel.DIESEL, 6.2, 10000);
-    newVehicle.id = 1;
+    newVehicle.id = new ObjectId(1);
     let newTrip: Trip = new Trip(newDriver, newVehicle, new Date(), TripPurpose.BUSINESS, "Miskolc", "Budapest", 182)
-    newTrip.id = 1;
+    newTrip.id = new ObjectId(1);
 
 
-    await AppDataSource.manager.save(newAdmin);
     await AppDataSource.manager.save(newDriver);
     await AppDataSource.manager.save(newDriver2);
     await AppDataSource.manager.save(newVehicle);
