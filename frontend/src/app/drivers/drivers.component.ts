@@ -45,7 +45,7 @@ export class DriversComponent implements OnInit {
 
     console.log(this.currentDate.toDateString());
 
-    let id: number;
+    let id: string;
     this.route.params.subscribe(
       (params: Params) => {
         id = params['id'];
@@ -80,12 +80,16 @@ export class DriversComponent implements OnInit {
   loadData() {
     this.driversProxyService.getAllDrivers().subscribe(data => {
       console.log(data);
+      data.forEach(driver => {
+        driver.dateOfBirth = driver.dateOfBirth.slice(0, 10);
+        driver.idExpirationDate = driver.idExpirationDate.slice(0, 10);
+      })
       this.driverSource = new MatTableDataSource(data);
     });
   }
 
   onRowClicked(row) {
-    this.router.navigate(['/drivers/', row.id]);
+    this.router.navigate(['/drivers/', row._id]);
   }
 
   clearSelected() {
@@ -120,9 +124,9 @@ export class DriversComponent implements OnInit {
         this.selectedDriver = new DriverDTO(null, null, null, null, null);
       this.selectedDriver.name = formDriver.name;
       this.selectedDriver.driversLicense = formDriver.driversLicense.toUpperCase();
-      this.selectedDriver.dateOfBirth = formDriver.dateOfBirth.toISOString();
+      this.selectedDriver.dateOfBirth = formDriver.dateOfBirth.toDateString() + 'Z';
       this.selectedDriver.address = formDriver.address;
-      this.selectedDriver.idExpirationDate = formDriver.idExpirationDate.toISOString();
+      this.selectedDriver.idExpirationDate = formDriver.idExpirationDate.toDateString() + 'Z';
 
       console.log(this.selectedDriver);
 

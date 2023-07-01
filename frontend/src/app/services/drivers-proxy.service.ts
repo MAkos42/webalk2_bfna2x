@@ -17,7 +17,7 @@ export class DriversProxyService {
     return this.http.get<DriverDTO[]>(url);
   }
 
-  getDriver(id: number): Observable<DriverDTO> {
+  getDriver(id: string): Observable<DriverDTO> {
     const url = `${this.apiUrl}/getdriver`;
     return this.http.post<DriverDTO>(url, { id });
   }

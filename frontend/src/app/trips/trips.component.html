@@ -46,7 +46,7 @@
     <mat-form-field>
         <mat-label>Sofőr</mat-label>
         <mat-select formControlName="driver">
-            <mat-option *ngFor="let driver of eligibleDrivers" [value]="driver.id">{{ driver.driversLicense
+            <mat-option *ngFor="let driver of eligibleDrivers" [value]="driver._id">{{ driver.driversLicense
                 }} | {{driver.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="tripForm.controls['driver'].hasError('required') && tripForm.controls['driver'].touched">
@@ -56,7 +56,7 @@
     <mat-form-field>
         <mat-label>Jármű</mat-label>
         <mat-select formControlName="vehicle">
-            <mat-option *ngFor="let vehicle of vehiclesList" [value]="vehicle.id">{{ vehicle.regPlate
+            <mat-option *ngFor="let vehicle of vehiclesList" [value]="vehicle._id">{{ vehicle.regPlate
                 }} | {{vehicle.type}}</mat-option>
         </mat-select>
         <mat-error *ngIf="tripForm.controls['vehicle'].hasError('required') && tripForm.controls['vehicle'].touched">

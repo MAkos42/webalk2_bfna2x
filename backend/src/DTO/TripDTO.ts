@@ -3,9 +3,9 @@ import { TripPurpose } from "../entity/TripPurpose"
 
 export class TripDTO {
 
-    driver: number
+    driver: string
 
-    vehicle: number
+    vehicle: string
 
     date: Date
 
@@ -19,11 +19,11 @@ export class TripDTO {
 
     isReturnTrip: boolean
 
-    constructor(trip?: Trip, driver?: number, vehicle?: number, date?: Date, purpose?: TripPurpose, startLocation?: string, endLocation?: string, distance?: number, isReturnTrip?: boolean) {
+    constructor(trip?: Trip, driver?: string, vehicle?: string, date?: Date, purpose?: TripPurpose, startLocation?: string, endLocation?: string, distance?: number, isReturnTrip?: boolean) {
         if (trip !== undefined) {
             console.log(trip)
-            this.driver = trip.driver.id;
-            this.vehicle = trip.vehicle.id;
+            this.driver = trip.driver._id.toHexString();
+            this.vehicle = trip.vehicle._id.toHexString();
             this.date = trip.date;
             this.purpose = trip.purpose;
             this.startLocation = trip.startLocation;

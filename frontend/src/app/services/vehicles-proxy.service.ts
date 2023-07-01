@@ -16,7 +16,7 @@ export class VehiclesProxyService {
     return this.http.get<VehicleDTO[]>(url);
   }
 
-  getVehicle(id: number): Observable<VehicleDTO> {
+  getVehicle(id: string): Observable<VehicleDTO> {
     const url = `${this.apiUrl}/getvehicle`;
     return this.http.post<VehicleDTO>(url, { id });
   }

@@ -2,7 +2,7 @@ import { Fuel } from "./Fuel"
 
 export class VehicleDTO {
 
-    id: number
+    _id: string
 
     regPlate: string
 

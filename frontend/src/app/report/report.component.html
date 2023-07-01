@@ -7,7 +7,7 @@
     <mat-form-field>
         <mat-label>Jármű</mat-label>
         <mat-select formControlName="vehicle">
-            <mat-option *ngFor="let vehicle of vehiclesList" [value]="vehicle.id">{{ vehicle.regPlate
+            <mat-option *ngFor="let vehicle of vehiclesList" [value]="vehicle._id">{{ vehicle.regPlate
                 }} | {{vehicle.type}}</mat-option>
         </mat-select>
         <mat-error

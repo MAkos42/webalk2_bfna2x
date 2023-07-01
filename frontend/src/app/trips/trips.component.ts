@@ -66,13 +66,13 @@ export class TripsComponent implements OnInit {
     });
   }
 
-  displayDriver(id: number): string {
-    let driver: DriverDTO = this.driversList.find(x => x.id === id);
+  displayDriver(id: string): string {
+    let driver: DriverDTO = this.driversList.find(x => x._id === id);
     return driver.driversLicense + ' | ' + driver.name;
   }
 
-  displayVehicle(id: number): string {
-    let vehicle: VehicleDTO = this.vehiclesList.find(x => x.id === id);
+  displayVehicle(id: string): string {
+    let vehicle: VehicleDTO = this.vehiclesList.find(x => x._id === id);
     return vehicle.regPlate + ' | ' + vehicle.type;
   }
 

@@ -17,7 +17,7 @@ export class ReportComponent implements OnInit {
   vehiclesList: VehicleDTO[];
 
   reportForm = new FormGroup({
-    vehicle: new FormControl<number>(null, [Validators.required]),
+    vehicle: new FormControl<string>(null, [Validators.required]),
     startDate: new FormControl<Date>(null, [Validators.required]),
     endDate: new FormControl<Date>(null, [Validators.required])
   });
@@ -43,11 +43,11 @@ export class ReportComponent implements OnInit {
     });
   }
 
-  displayVehicle(id: number): string {
+  displayVehicle(id: string): string {
     if (id === null) {
       return null;
     }
-    let vehicle: VehicleDTO = this.vehiclesList.find(x => x.id === id);
+    let vehicle: VehicleDTO = this.vehiclesList.find(x => x._id === id);
     return vehicle.regPlate + ' | ' + vehicle.type;
   }
 

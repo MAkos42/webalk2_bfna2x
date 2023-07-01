@@ -67,9 +67,10 @@ app.post('/api/getvehiclebyreg', async (req, res) => {
 
 app.post('/api/savevehicle', async (req, res) => {
     try {
-        const { id, regPlate, type, fuel, fuelEcon, odometer } = req.body;
-        const newVehicle: Vehicle = new Vehicle(regPlate, type, fuel, fuelEcon, odometer)
-        newVehicle.id = id;
+        const { _id, regPlate, type, fuel, fuelEcon, odometer } = req.body;
+        const newVehicle: Vehicle = new Vehicle(regPlate, type, fuel, fuelEcon, odometer);
+        if (_id != undefined)
+            newVehicle._id = ObjectId.createFromHexString(_id);
         console.log(newVehicle);
         await vService.saveVehicle(newVehicle);
 
@@ -121,9 +122,10 @@ app.post('/api/getdriverbylicense', async (req, res) => {
 
 app.post('/api/savedriver', async (req, res) => {
     try {
-        const { id, name, dateOfBirth, address, driversLicense, idExpirationDate } = req.body;
+        const { _id, name, dateOfBirth, address, driversLicense, idExpirationDate } = req.body;
         const newDriver: Driver = new Driver(name, new Date(Date.parse(dateOfBirth)), address, driversLicense, new Date(Date.parse(idExpirationDate)));
-        newDriver.id = id;
+        if (_id != undefined)
+            newDriver._id = ObjectId.createFromHexString(_id);
         console.log(newDriver);
         await dService.saveDriver(newDriver);
 
@@ -188,14 +190,10 @@ app.listen(3000, () => {
 });
 
 AppDataSource.initialize().then(async () => {
-    let newDriver: Driver = new Driver("Mészáros Ákos", new Date(2000, 9, 25), "valaholaföldön", "AB123456", new Date(2024, 1, 1));
-    newDriver.id = new ObjectId(1);
-    let newDriver2: Driver = new Driver("Balogh Gábor", new Date(1993, 11, 20), "Székesfehérvár", "XY123123", new Date(2023, 1, 1));
-    newDriver2.id = new ObjectId(2);
+    let newDriver: Driver = new Driver("Mészáros Ákos", new Date("2000-9-25Z"), "valaholaföldön", "AB123456", new Date("2024-1-1Z"));
+    let newDriver2: Driver = new Driver("Balogh Gábor", new Date("1993-11-20Z"), "Székesfehérvár", "XY123123", new Date("2023-1-1Z"));
     let newVehicle: Vehicle = new Vehicle("ABCD-111", "Honda Civic", Fuel.DIESEL, 6.2, 10000);
-    newVehicle.id = new ObjectId(1);
-    let newTrip: Trip = new Trip(newDriver, newVehicle, new Date(), TripPurpose.BUSINESS, "Miskolc", "Budapest", 182)
-    newTrip.id = new ObjectId(1);
+    let newTrip: Trip = new Trip(newDriver, newVehicle, new Date(), TripPurpose.BUSINESS, "Miskolc", "Budapest", 182);
 
 
     await AppDataSource.manager.save(newDriver);

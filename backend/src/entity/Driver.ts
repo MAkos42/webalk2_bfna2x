@@ -4,7 +4,7 @@ import { Column, Entity, ObjectId, ObjectIdColumn } from "typeorm";
 export class Driver {
 
     @ObjectIdColumn()
-    id: ObjectId
+    _id: ObjectId
 
     @Column()
     name: string

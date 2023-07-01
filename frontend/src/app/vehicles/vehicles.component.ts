@@ -42,7 +42,7 @@ export class VehiclesComponent implements OnInit {
   ngOnInit() {
     this.loadData();
 
-    let id: number;
+    let id: string;
     this.route.params.subscribe(
       (params: Params) => {
         id = params['id'];
@@ -78,7 +78,7 @@ export class VehiclesComponent implements OnInit {
 
   onRowClicked(row) {
     console.log(row);
-    this.router.navigate(['/vehicles/', row.id]);
+    this.router.navigate(['/vehicles/', row._id]);
   }
 
   clearSelected() {

@@ -5,7 +5,7 @@ import { Fuel } from "./Fuel"
 export class Vehicle {
 
     @ObjectIdColumn()
-    id: ObjectId
+    _id: ObjectId
 
     @Column("char", { length: 8, nullable: false, unique: true })
     regPlate: string
