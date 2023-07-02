@@ -12,6 +12,6 @@ export class Report {
 
         this.fuelConsumption = Math.round(this.distance * vehicle.fuelEcon / 100);
         this.flatRate = this.distance * 10;
-        this.sum = this.fuelConsumption + this.flatRate;
+        this.sum = this.fuelConsumption * 480 + this.flatRate;
     }
 }
