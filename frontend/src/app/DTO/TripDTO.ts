@@ -2,9 +2,9 @@ import { TripPurpose } from "./TripPurpose";
 
 export class TripDTO {
 
-    driver: number
+    driver: string
 
-    vehicle: number
+    vehicle: string
 
     date: string
 
@@ -18,7 +18,7 @@ export class TripDTO {
 
     isReturnTrip: boolean
 
-    constructor(driver: number, vehicle: number, date: string, purpose: TripPurpose, startLocation: string, endLocation: string, distance: number, isReturnTrip: boolean) {
+    constructor(driver: string, vehicle: string, date: string, purpose: TripPurpose, startLocation: string, endLocation: string, distance: number, isReturnTrip: boolean) {
         this.driver = driver
         this.vehicle = vehicle
         this.date = date

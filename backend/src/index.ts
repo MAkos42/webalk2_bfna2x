@@ -9,7 +9,6 @@ import { Vehicle } from "./entity/Vehicle";
 import { VehiclesService } from "./service/VehiclesService";
 import { DriversService } from "./service/DriversService";
 import { TripsService } from './service/TripsService';
-import { TripDTO } from "./DTO/TripDTO";
 import { ReportRequest } from "./DTO/ReportRequest";
 import { ObjectId } from "mongodb";
 
@@ -140,13 +139,8 @@ app.post('/api/savedriver', async (req, res) => {
 //#region Trips
 app.get('/api/trips', async (req, res) => {
     try {
-        const trips = await tService.getTrips();
-        const tableData: TripDTO[] = [];
-        trips.forEach(trip => {
-            console.log(trip)
-            console.log(new TripDTO(trip))
-            tableData.push(new TripDTO(trip));
-        })
+        const tableData = await tService.getTrips();
+        console.log('Returned entries:' + tableData.length);
         res.json(tableData);
     } catch (error) {
         console.error(error);
@@ -157,7 +151,7 @@ app.get('/api/trips', async (req, res) => {
 app.post('/api/report', async (req, res) => {
     try {
         const { vehicle, startDate, endDate } = req.body;
-        const request = new ReportRequest(vehicle, startDate, endDate);
+        const request = new ReportRequest(vehicle, new Date(startDate), new Date(endDate));
         const report = await tService.getReport(request);
 
         console.log(report);
@@ -173,9 +167,9 @@ app.post('/api/savetrip', async (req, res) => {
         const { driver, vehicle, date, purpose, startLocation, endLocation, distance, isReturnTrip } = req.body;
         console.log('(@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
         console.log(req.body);
-        const newTrip: TripDTO = new TripDTO(undefined, driver, vehicle, new Date(Date.parse(date)), purpose, startLocation, endLocation, distance, isReturnTrip);
+        const newTrip: Trip = new Trip(ObjectId.createFromHexString(driver), ObjectId.createFromHexString(vehicle), new Date(Date.parse(date)), purpose, startLocation, endLocation, distance);
         console.log(newTrip);
-        await tService.saveTrip(newTrip);
+        await tService.saveTrip(newTrip, isReturnTrip);
 
         res.json(newTrip);
     } catch (error) {
@@ -191,9 +185,14 @@ app.listen(3000, () => {
 
 AppDataSource.initialize().then(async () => {
     let newDriver: Driver = new Driver("Mészáros Ákos", new Date("2000-9-25Z"), "valaholaföldön", "AB123456", new Date("2024-1-1Z"));
+    newDriver._id = ObjectId.createFromHexString('64a0b0135181f709f85efda6');
     let newDriver2: Driver = new Driver("Balogh Gábor", new Date("1993-11-20Z"), "Székesfehérvár", "XY123123", new Date("2023-1-1Z"));
+    newDriver2._id = ObjectId.createFromHexString('64a0b0135181f709f85efda7');
     let newVehicle: Vehicle = new Vehicle("ABCD-111", "Honda Civic", Fuel.DIESEL, 6.2, 10000);
-    let newTrip: Trip = new Trip(newDriver, newVehicle, new Date(), TripPurpose.BUSINESS, "Miskolc", "Budapest", 182);
+    newVehicle._id = ObjectId.createFromHexString('64a0b0135181f709f85efda8');
+    let newTrip: Trip = new Trip(newDriver._id, newVehicle._id, new Date(), TripPurpose.BUSINESS, "Miskolc", "Budapest", 182);
+    newTrip._id = ObjectId.createFromHexString('64a0b0135181f709f85efda9');
+
 
 
     await AppDataSource.manager.save(newDriver);

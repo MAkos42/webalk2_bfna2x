@@ -1,4 +1,3 @@
-import { TripDTO } from "../DTO/TripDTO";
 import { AppDataSource } from "../data-source";
 import { Trip } from "../entity/Trip";
 import { DriversService } from "./DriversService";
@@ -7,6 +6,7 @@ import { Vehicle } from "../entity/Vehicle";
 import { ReportRequest } from "../DTO/ReportRequest";
 import { Between } from "typeorm";
 import { Report } from "../entity/Report";
+import { ObjectId } from "mongodb";
 
 export class TripsService {
     driverService: DriversService = new DriversService();
@@ -17,37 +17,31 @@ export class TripsService {
     }
 
     getReport(request: ReportRequest): Promise<void | Report> {
-        return this.vehiclesService.getVehicle(request.vehicleId).then(vehicle => {
+        console.log(request);
 
-            return AppDataSource.manager.find(Trip, { where: { vehicle: vehicle, date: Between(request.startDate, request.endDate) } }).then(trips => {
+        return this.vehiclesService.getVehicle(request.vehicleId).then(vehicle => {
+            console.log(vehicle)
+
+            return AppDataSource.getMongoRepository(Trip).find({ where: { vehicle: vehicle._id, date: { $gte: request.startDate, $lte: request.endDate } } }).then(trips => {
                 return new Report(vehicle, trips);
             })
         });
     }
 
-    saveTrip(newTrip: TripDTO): Promise<void | Trip[]> {
+    saveTrip(newTrip: Trip, isReturnTrip: boolean): Promise<void | Trip[]> {
         let newOdometer;
         let trips: Trip[] = [];
-        let trip: Trip = new Trip(null, null, null, null, null, null, null);
-        let returnTrip: Trip;
         console.log(newTrip.driver);
 
-        return this.driverService.getDriver(newTrip.driver).then(driver => {
-            console.log(driver); trip.driver = driver;
-            this.vehiclesService.getVehicle(newTrip.vehicle).then(vehicle => {
-                console.log(vehicle);
-                trip.vehicle = vehicle;
-                trip.date = newTrip.date;
-                trip.purpose = newTrip.purpose;
-                trip.startLocation = newTrip.startLocation;
-                trip.endLocation = newTrip.endLocation;
-                trip.distance = newTrip.distance;
-                trips.push(trip);
+        return this.driverService.getDriver(newTrip.driver.toHexString()).then(driver => {
+            console.log(driver);
+            this.vehiclesService.getVehicle(newTrip.vehicle.toHexString()).then(vehicle => {
+                trips.push(newTrip);
 
-                newOdometer = trip.vehicle.odometer + newTrip.distance;
+                newOdometer = vehicle.odometer + newTrip.distance;
 
-                if (newTrip.isReturnTrip) {
-                    returnTrip = new Trip(trip.driver, trip.vehicle, trip.date, trip.purpose, trip.endLocation, trip.startLocation, trip.distance);
+                if (isReturnTrip) {
+                    let returnTrip = new Trip(newTrip.driver, newTrip.vehicle, newTrip.date, newTrip.purpose, newTrip.endLocation, newTrip.startLocation, newTrip.distance);
                     newOdometer += newTrip.distance;
                     trips.push(returnTrip);
                 }

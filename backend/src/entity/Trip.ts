@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, ObjectId, ObjectIdColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, ObjectId, ObjectIdColumn, RelationId } from "typeorm";
 import { Vehicle } from './Vehicle';
 import { Driver } from "./Driver";
 import { TripPurpose } from "./TripPurpose";
@@ -7,15 +7,13 @@ import { TripPurpose } from "./TripPurpose";
 export class Trip {
 
     @ObjectIdColumn()
-    id: ObjectId
+    _id: ObjectId
 
-    @ManyToOne(() => Driver, { eager: true })
-    @JoinColumn()
-    driver: Driver
+    @Column("objectId")
+    driver: ObjectId
 
-    @ManyToOne(() => Vehicle, { eager: true })
-    @JoinColumn()
-    vehicle: Vehicle
+    @Column("objectId")
+    vehicle: ObjectId
 
     @Column("date")
     date: Date
@@ -32,7 +30,7 @@ export class Trip {
     @Column()
     distance: number
 
-    constructor(driver: Driver, vehicle: Vehicle, date: Date, purpose: TripPurpose, startLocation: string, endLocation: string, distance: number) {
+    constructor(driver: ObjectId, vehicle: ObjectId, date: Date, purpose: TripPurpose, startLocation: string, endLocation: string, distance: number) {
         this.driver = driver
         this.vehicle = vehicle
         this.date = date

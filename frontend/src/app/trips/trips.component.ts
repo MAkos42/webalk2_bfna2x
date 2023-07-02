@@ -26,8 +26,8 @@ export class TripsComponent implements OnInit {
   displayedColumns: string[] = ['driver', 'vehicle', 'date', 'purpose', 'startLocation', 'endLocation', 'distance'];
 
   tripForm = new FormGroup({
-    driver: new FormControl<number>(null, [Validators.required]),
-    vehicle: new FormControl<number>(null, [Validators.required]),
+    driver: new FormControl<string>(null, [Validators.required]),
+    vehicle: new FormControl<string>(null, [Validators.required]),
     date: new FormControl<Date>(null, [Validators.required]),
     purpose: new FormControl<TripPurpose>(null, [Validators.required]),
     startLocation: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
@@ -61,18 +61,24 @@ export class TripsComponent implements OnInit {
     });
 
     this.tripsProxyService.getAllTrips().subscribe(data => {
+      data.forEach(trip => {
+        trip.date = trip.date.slice(0, 10);
+      })
       console.log(data);
       this.tripSource = new MatTableDataSource(data);
     });
   }
 
-  displayDriver(id: string): string {
-    let driver: DriverDTO = this.driversList.find(x => x._id === id);
+  drawDriver(id: string): string {
+    console.log(id);
+    let driver: DriverDTO = this.driversList.find(x => x._id == id);
+    console.log(driver);
     return driver.driversLicense + ' | ' + driver.name;
   }
 
-  displayVehicle(id: string): string {
-    let vehicle: VehicleDTO = this.vehiclesList.find(x => x._id === id);
+  drawVehicle(id: string): string {
+    console.log(id)
+    let vehicle: VehicleDTO = this.vehiclesList.find(x => x._id == id);
     return vehicle.regPlate + ' | ' + vehicle.type;
   }
 
@@ -83,7 +89,7 @@ export class TripsComponent implements OnInit {
 
     let formDriver = this.tripForm.value;
     console.log(formDriver);
-    let newTrip = new TripDTO(formDriver.driver, formDriver.vehicle, formDriver.date.toISOString(), formDriver.purpose, formDriver.startLocation, formDriver.endLocation, formDriver.distance, formDriver.isReturnTrip);
+    let newTrip = new TripDTO(formDriver.driver, formDriver.vehicle, formDriver.date.toDateString() + 'Z', formDriver.purpose, formDriver.startLocation, formDriver.endLocation, formDriver.distance, formDriver.isReturnTrip);
 
     console.log(newTrip);
     this.tripsProxyService.saveTrip(newTrip).subscribe(data => {

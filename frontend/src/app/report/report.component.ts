@@ -58,7 +58,7 @@ export class ReportComponent implements OnInit {
     }
     let requestForm = this.reportForm.value;
 
-    let request: ReportRequest = new ReportRequest(requestForm.vehicle, requestForm.startDate, requestForm.endDate);
+    let request: ReportRequest = new ReportRequest(requestForm.vehicle, requestForm.startDate.toDateString() + 'Z', requestForm.endDate.toDateString() + 'Z');
 
     this.tripsProxyService.getReport(request).subscribe(response => {
       this.returnForm.setValue({

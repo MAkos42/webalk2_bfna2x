@@ -5,11 +5,11 @@
     <!-- Replace 'column' with your table column names -->
     <ng-container matColumnDef="driver">
         <mat-header-cell *matHeaderCellDef>Sofőr</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ displayDriver(element.driver) }}</mat-cell>
+        <mat-cell *matCellDef="let element">{{ drawDriver(element.driver) }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="vehicle">
         <mat-header-cell *matHeaderCellDef>Autó</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ displayVehicle(element.vehicle) }}</mat-cell>
+        <mat-cell *matCellDef="let element">{{ drawVehicle(element.vehicle) }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Dátum</mat-header-cell>
